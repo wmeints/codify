@@ -51,6 +51,7 @@ export const listSessions = async (limit?: number): Promise<Session[]> => {
     .filter((timestamp) => Number.isFinite(timestamp));
 
   const settled = await Promise.all(timestamps.map(readSession));
+
   const sessions = settled.filter(
     (session): session is Session => session !== null,
   );
@@ -68,3 +69,30 @@ export const listSessions = async (limit?: number): Promise<Session[]> => {
 
 export const getSession = (timestamp: number): Promise<Session | null> =>
   readSession(timestamp);
+
+export const createSession = async (prompt: string): Promise<Session> => {
+  const timestamp = Date.now();
+  const now = new Date().toISOString();
+
+  const session: Session = {
+    createdAt: now,
+    history: [
+      {
+        id: crypto.randomUUID(),
+        parts: [{ text: prompt, type: "text" }],
+        role: "user",
+      },
+    ],
+    modifiedAt: now,
+    timestamp,
+    title: "Untitled",
+  };
+
+  await fs.mkdir(SESSIONS_DIR, { recursive: true });
+
+  const { timestamp: _omitted, ...stored } = session;
+  const filePath = path.join(SESSIONS_DIR, `${timestamp}.json`);
+  await fs.writeFile(filePath, JSON.stringify(stored, null, 2), "utf-8");
+
+  return session;
+};

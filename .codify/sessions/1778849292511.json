@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-05-15T12:48:12.511Z",
+  "history": [
+    {
+      "id": "a3f9b200-0499-47d2-8993-42b1de852d68",
+      "parts": [
+        {
+          "text": "I want to build something in the coding agent, thanks",
+          "type": "text"
+        }
+      ],
+      "role": "user"
+    }
+  ],
+  "modifiedAt": "2026-05-15T12:48:12.511Z",
+  "title": "Untitled"
+}
