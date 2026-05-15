@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Oxanium } from "next/font/google";
 
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const oxanium = Oxanium({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,10 +37,15 @@ export default function RootLayout({
         geistSans.variable,
         geistMono.variable,
         "font-sans",
-        oxanium.variable
+        oxanium.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="flex flex-col">{children}</main>
+        </SidebarProvider>
+      </body>
     </html>
   );
 }
