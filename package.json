@@ -13,6 +13,9 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.77",
+    "@ai-sdk/openai": "^3.0.63",
+    "ai": "^6.0.182",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.16.0",
