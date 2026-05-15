@@ -1,6 +1,7 @@
 "use client";
 
-import { getToolName, isToolUIPart } from "ai";
+import { getToolName, isFileUIPart, isToolUIPart } from "ai";
+import { Paperclip } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -49,6 +50,32 @@ export const MessagePart = ({ part }: MessagePartProps) => {
       <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:text-foreground prose-code:before:content-none prose-code:after:content-none">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{part.text}</ReactMarkdown>
       </div>
+    );
+  }
+
+  if (isFileUIPart(part)) {
+    const label = part.filename ?? part.mediaType;
+    if (part.mediaType.startsWith("image/")) {
+      return (
+        // oxlint-disable-next-line no-img-element
+        <img
+          alt={label}
+          className="max-h-64 max-w-full rounded-md border"
+          src={part.url}
+        />
+      );
+    }
+    return (
+      <a
+        className="inline-flex max-w-full items-center gap-2 rounded-md border bg-muted/40 px-2.5 py-1.5 text-sm hover:bg-muted"
+        download={part.filename}
+        href={part.url}
+        rel="noopener"
+        target="_blank"
+      >
+        <Paperclip className="size-4 shrink-0" />
+        <span className="truncate font-mono">{label}</span>
+      </a>
     );
   }
 

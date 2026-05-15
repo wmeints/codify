@@ -1,12 +1,12 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { convertFileListToFileUIParts, DefaultChatTransport } from "ai";
 import type { UIMessage } from "ai";
-import { ArrowRight, Square } from "lucide-react";
+import { ArrowRight, Paperclip, Square, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
 
 import { MessagePart } from "@/components/message-part";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,14 @@ const handleSubmitKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
     event.currentTarget.form?.requestSubmit();
   }
+};
+
+const filesToFileList = (files: File[]): FileList => {
+  const transfer = new DataTransfer();
+  for (const file of files) {
+    transfer.items.add(file);
+  }
+  return transfer.files;
 };
 
 interface MessageRowProps {
@@ -102,6 +110,8 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
 
   const router = useRouter();
   const [input, setInput] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const autoSentRef = useRef(false);
   const previousStatusRef = useRef(status);
   const scrollEndRef = useRef<HTMLDivElement | null>(null);
@@ -134,14 +144,38 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
     scrollEndRef.current?.scrollIntoView({ block: "end" });
   }, [messages]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmed = input.trim();
     if (trimmed.length === 0 || status !== "ready") {
       return;
     }
+    const pendingAttachments = attachments;
     setInput("");
-    void sendMessage({ text: trimmed });
+    setAttachments([]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    const files =
+      pendingAttachments.length > 0
+        ? await convertFileListToFileUIParts(
+            filesToFileList(pendingAttachments)
+          )
+        : undefined;
+    await sendMessage({ files, text: trimmed });
+  };
+
+  const handleFilesSelected = (event: ChangeEvent<HTMLInputElement>) => {
+    const selected = event.target.files;
+    if (!selected || selected.length === 0) {
+      return;
+    }
+    setAttachments((current) => [...current, ...selected]);
+    event.target.value = "";
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((current) => current.filter((_, i) => i !== index));
   };
 
   const isStreaming = status === "submitted" || status === "streaming";
@@ -179,41 +213,86 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
 
       <form
         className="shrink-0 bg-background px-6 py-4"
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
       >
-        <div className="relative mx-auto w-full max-w-3xl">
-          <Textarea
-            aria-label="Prompt"
-            className="min-h-24 resize-none pr-14"
-            disabled={composerDisabled}
-            onChange={(event) => setInput(event.target.value)}
-            onKeyDown={handleSubmitKeyDown}
-            placeholder="Send a message to the agent..."
-            rows={3}
-            value={input}
-          />
-          {isStreaming ? (
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-2">
+          {attachments.length > 0 ? (
+            <ul className="flex flex-wrap gap-2">
+              {attachments.map((file, index) => (
+                <li
+                  className="flex max-w-full items-center gap-2 rounded-md border bg-muted/40 px-2 py-1 text-sm"
+                  // biome-ignore lint/suspicious/noArrayIndexKey: attachments have no stable id
+                  key={`${file.name}-${index}`}
+                >
+                  <Paperclip className="size-3.5 shrink-0" />
+                  <span className="truncate font-mono">{file.name}</span>
+                  <button
+                    aria-label={`Remove ${file.name}`}
+                    className="text-muted-foreground hover:text-foreground"
+                    onClick={() => removeAttachment(index)}
+                    type="button"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <div className="relative">
+            <Textarea
+              aria-label="Prompt"
+              className="min-h-24 resize-none pr-14 pl-12"
+              disabled={composerDisabled}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={handleSubmitKeyDown}
+              placeholder="Send a message to the agent..."
+              rows={3}
+              value={input}
+            />
+            <input
+              className="sr-only"
+              multiple
+              onChange={handleFilesSelected}
+              ref={fileInputRef}
+              tabIndex={-1}
+              type="file"
+            />
             <Button
-              aria-label="Stop generation"
-              className="absolute right-2 bottom-2"
-              onClick={() => stop()}
+              aria-label="Attach files"
+              className="absolute bottom-2 left-2"
+              disabled={composerDisabled}
+              onClick={() => fileInputRef.current?.click()}
               size="icon"
               type="button"
-              variant="secondary"
+              variant="ghost"
             >
-              <Square />
+              <Paperclip />
             </Button>
-          ) : (
-            <Button
-              aria-label="Submit prompt"
-              className="absolute right-2 bottom-2"
-              disabled={composerDisabled || input.trim().length === 0}
-              size="icon"
-              type="submit"
-            >
-              <ArrowRight />
-            </Button>
-          )}
+            {isStreaming ? (
+              <Button
+                aria-label="Stop generation"
+                className="absolute right-2 bottom-2"
+                onClick={() => stop()}
+                size="icon"
+                type="button"
+                variant="secondary"
+              >
+                <Square />
+              </Button>
+            ) : (
+              <Button
+                aria-label="Submit prompt"
+                className="absolute right-2 bottom-2"
+                disabled={composerDisabled || input.trim().length === 0}
+                size="icon"
+                type="submit"
+              >
+                <ArrowRight />
+              </Button>
+            )}
+          </div>
         </div>
       </form>
     </div>

@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { generateText, isTextUIPart } from "ai";
-import type { UIMessage } from "ai";
+import type { FileUIPart, UIMessage } from "ai";
 
 import { getModel } from "@/lib/llm";
 
@@ -110,7 +110,10 @@ export const saveSessionHistory = async (
   await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf-8");
 };
 
-export const createSession = async (prompt: string): Promise<Session> => {
+export const createSession = async (
+  prompt: string,
+  attachments: FileUIPart[] = []
+): Promise<Session> => {
   const timestamp = Date.now();
   const now = new Date().toISOString();
   const customInstructions = await readAgentsInstructions();
@@ -120,7 +123,7 @@ export const createSession = async (prompt: string): Promise<Session> => {
     history: [
       {
         id: crypto.randomUUID(),
-        parts: [{ text: prompt, type: "text" }],
+        parts: [...attachments, { text: prompt, type: "text" }],
         role: "user",
       },
     ],
