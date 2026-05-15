@@ -4,9 +4,11 @@ import path from "node:path";
 
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
+import type * as SessionsModule from "@/lib/sessions";
+
 let tmpDir: string;
 let originalCwd: string;
-let sessions: typeof import("@/lib/sessions");
+let sessions: typeof SessionsModule;
 
 const sessionsDir = () => path.join(tmpDir, ".codify", "sessions");
 

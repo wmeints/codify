@@ -53,7 +53,7 @@ export const listSessions = async (limit?: number): Promise<Session[]> => {
   const settled = await Promise.all(timestamps.map(readSession));
 
   const sessions = settled.filter(
-    (session): session is Session => session !== null,
+    (session): session is Session => session !== null
   );
 
   sessions.sort((a, b) => {
@@ -69,6 +69,23 @@ export const listSessions = async (limit?: number): Promise<Session[]> => {
 
 export const getSession = (timestamp: number): Promise<Session | null> =>
   readSession(timestamp);
+
+export const saveSessionHistory = async (
+  timestamp: number,
+  history: UIMessage[]
+): Promise<void> => {
+  const filePath = path.join(SESSIONS_DIR, `${timestamp}.json`);
+  const raw = await fs.readFile(filePath, "utf-8");
+  const existing = JSON.parse(raw) as StoredSession;
+
+  const updated: StoredSession = {
+    ...existing,
+    history,
+    modifiedAt: new Date().toISOString(),
+  };
+
+  await fs.writeFile(filePath, JSON.stringify(updated, null, 2), "utf-8");
+};
 
 export const createSession = async (prompt: string): Promise<Session> => {
   const timestamp = Date.now();

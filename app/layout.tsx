@@ -40,7 +40,7 @@ export default function RootLayout({
         oxanium.variable
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex h-svh flex-col overflow-hidden">
         <SidebarProvider>
           <AppSidebar />
           <main className="flex flex-1 flex-col">{children}</main>

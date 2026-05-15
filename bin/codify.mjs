@@ -9,6 +9,7 @@ const require = createRequire(import.meta.url);
 const nextBin = require.resolve("next/dist/bin/next");
 
 const runNext = (args) =>
+  // oxlint-disable-next-line promise/avoid-new -- wrapping spawn's event-based API
   new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [nextBin, ...args], {
       cwd: projectRoot,
