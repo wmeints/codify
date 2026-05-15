@@ -1,7 +1,7 @@
 # Codify - An agentic prototype
 
-This project is a prototype I use to explain coding agents to people. It's
-an almost fully featured coding agent I'm using myself with a local LLM.
+Codify is a NextJS based coding agent that you can use to build applications.
+Note, this looks like a very complete agent, but in reality isn't that mature yet.
 
 ## Getting started
 
