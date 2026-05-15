@@ -1,3 +1,6 @@
+import { Plug } from "lucide-react";
+import Link from "next/link";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,10 +13,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
 import { SessionsList } from "./sessions-list";
 import { Button } from "./ui/button";
-import Link from "next/link";
-import { Plug } from "lucide-react";
 
 export const AppSidebar = () => {
   const providerName = "Local";
