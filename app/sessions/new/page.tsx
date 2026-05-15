@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
+
 import { NewSessionForm } from "@/components/new-session-form";
 import { getDisplayCwd } from "@/lib/cwd";
+
+export const metadata: Metadata = {
+  title: "New session - Codify",
+};
 
 export default function NewSessionPage() {
   const displayCwd = getDisplayCwd();

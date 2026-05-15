@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import type { UIMessage } from "ai";
 import { ArrowRight, Square } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 
@@ -99,8 +100,10 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
       }),
     });
 
+  const router = useRouter();
   const [input, setInput] = useState("");
   const autoSentRef = useRef(false);
+  const previousStatusRef = useRef(status);
   const scrollEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -116,6 +119,16 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
     autoSentRef.current = true;
     void regenerate();
   }, [status, initialMessages, regenerate]);
+
+  useEffect(() => {
+    const wasActive =
+      previousStatusRef.current === "streaming" ||
+      previousStatusRef.current === "submitted";
+    if (wasActive && status === "ready") {
+      router.refresh();
+    }
+    previousStatusRef.current = status;
+  }, [status, router]);
 
   useLayoutEffect(() => {
     scrollEndRef.current?.scrollIntoView({ block: "end" });

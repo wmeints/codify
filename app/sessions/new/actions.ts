@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createSession } from "@/lib/sessions";
@@ -20,5 +21,6 @@ export const createSessionAction = async (
   }
 
   const session = await createSession(prompt);
+  revalidatePath("/", "layout");
   redirect(`/sessions/${session.timestamp}`);
 };

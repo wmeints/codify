@@ -1,0 +1,350 @@
+{
+  "createdAt": "2026-05-15T14:53:51.683Z",
+  "history": [
+    {
+      "id": "aa522623-143f-433b-ae04-8b7f6f6aa5b4",
+      "parts": [
+        {
+          "text": "Update the title of the website to \"Codify\"",
+          "type": "text"
+        }
+      ],
+      "role": "user"
+    },
+    {
+      "id": "BnkbitIbZVDKosee",
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "I'll help you update the website title to \"Codify\". Let me first check the project structure to find where the title is set.",
+          "state": "done"
+        },
+        {
+          "type": "tool-readFile",
+          "toolCallId": "toolu_01Qm6PQRUZV4kJqQpVQJzDAs",
+          "state": "output-available",
+          "input": {
+            "path": "README.md"
+          },
+          "output": {
+            "bytes": 903,
+            "content": "# Codify - An agentic prototype\n\nCodify is a NextJS based coding agent that you can use to build applications.\nNote, this looks like a very complete agent, but in reality isn't that mature yet.\n\n## Getting started\n\nRun these steps to prepare the code:\n\n- `git clone https://github.com/wmeints/codify`\n- `cd codify`\n- `pnpm install`\n\nConfigure the following settings in `.env` to get access to an LLM:\n\n```dotenv\nCODIFY_LLM_PROVIDER=local|anthropic\nCODIFY_LLM_API_KEY=\nCODIFY_LLM_URL=\n```\n\nRun the application with `pnpm codify` and access it via\nhttp://localhost:3000/.\n\nTo make the `codify` command available globally on your system, link\nthe package once:\n\n```bash\npnpm link --global\n```\n\nAfter that you can launch the app from anywhere with:\n\n```bash\ncodify\n```\n\nThe command builds the app if needed and then starts the production\nserver. It accepts no arguments — any extra arguments are ignored.\n",
+            "path": "README.md",
+            "truncated": false
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "tool-shell",
+          "toolCallId": "toolu_01Q8cTd63Zs4E2ZX7BZw5qGu",
+          "state": "output-available",
+          "input": {
+            "command": "find . -name \"*.tsx\" -o -name \"*.ts\" -o -name \"*.html\" | grep -E \"(layout|index|app|page)\" | head -20"
+          },
+          "output": {
+            "command": "find . -name \"*.tsx\" -o -name \"*.ts\" -o -name \"*.html\" | grep -E \"(layout|index|app|page)\" | head -20",
+            "exitCode": 0,
+            "stderr": "",
+            "stdout": "./app/sessions/new/page.tsx\n./app/sessions/new/actions.ts\n./app/sessions/[id]/page.tsx\n./app/page.tsx\n./app/api/sessions/[id]/chat/route.ts\n./app/layout.tsx\n./lib/agent/tools/index.ts\n./lib/agent/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/errors/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/shared/v2/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/shared/v3/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/shared/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/provider/v2/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/provider/v3/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/provider/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/json-value/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/image-model/v2/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/image-model/v3/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/image-model/index.ts\n./node_modules/.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider/src/video-model/v3/index.ts\n"
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "tool-readFile",
+          "toolCallId": "toolu_01WjpaacFP7nJdz84NQoUXhr",
+          "state": "output-available",
+          "input": {
+            "path": "app/layout.tsx"
+          },
+          "output": {
+            "bytes": 1195,
+            "content": "import type { Metadata } from \"next\";\nimport { Geist, Geist_Mono, Oxanium } from \"next/font/google\";\n\nimport \"./globals.css\";\nimport { AppSidebar } from \"@/components/app-sidebar\";\nimport { SidebarProvider } from \"@/components/ui/sidebar\";\nimport { cn } from \"@/lib/utils\";\n\nconst oxanium = Oxanium({ subsets: [\"latin\"], variable: \"--font-sans\" });\n\nconst geistSans = Geist({\n  subsets: [\"latin\"],\n  variable: \"--font-geist-sans\",\n});\n\nconst geistMono = Geist_Mono({\n  subsets: [\"latin\"],\n  variable: \"--font-geist-mono\",\n});\n\nexport const metadata: Metadata = {\n  description: \"Generated by create next app\",\n  title: \"Create Next App\",\n};\n\nexport default function RootLayout({\n  children,\n}: Readonly<{\n  children: React.ReactNode;\n}>) {\n  return (\n    <html\n      lang=\"en\"\n      className={cn(\n        \"h-full\",\n        \"antialiased\",\n        geistSans.variable,\n        geistMono.variable,\n        \"font-sans\",\n        oxanium.variable\n      )}\n    >\n      <body className=\"flex h-svh flex-col overflow-hidden\">\n        <SidebarProvider>\n          <AppSidebar />\n          <main className=\"flex flex-1 flex-col\">{children}</main>\n        </SidebarProvider>\n      </body>\n    </html>\n  );\n}\n",
+            "path": "app/layout.tsx",
+            "truncated": false
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "Now I'll update the title in the layout file:",
+          "state": "done"
+        },
+        {
+          "type": "tool-editFile",
+          "toolCallId": "toolu_017EUyQx1p7s5cERyM57ruRf",
+          "state": "output-available",
+          "input": {
+            "newText": "export const metadata: Metadata = {\n  description: \"Generated by create next app\",\n  title: \"Codify\",\n};",
+            "oldText": "export const metadata: Metadata = {\n  description: \"Generated by create next app\",\n  title: \"Create Next App\",\n};",
+            "path": "app/layout.tsx"
+          },
+          "output": {
+            "path": "app/layout.tsx",
+            "replaced": 1
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "Perfect! I've updated the website title from \"Create Next App\" to \"Codify\" in the `app/layout.tsx` file. This is the root layout component in Next.js where the metadata for the entire application is defined. The change will apply to all pages across the website.",
+          "state": "done"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "text",
+          "text": "I want the title of the session details to be <session title> - Codify."
+        }
+      ],
+      "id": "vWOUywSJzoEYbfb6",
+      "role": "user"
+    },
+    {
+      "id": "0wIb9IXsMq7KITwx",
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "I'll help you update the session details page to show the session title followed by \" - Codify\". Let me first check the session details page.",
+          "state": "done"
+        },
+        {
+          "type": "tool-readFile",
+          "toolCallId": "toolu_01NsyPnwXbBpJH6LWoF7b8Yg",
+          "state": "output-available",
+          "input": {
+            "path": "app/sessions/[id]/page.tsx"
+          },
+          "output": {
+            "bytes": 591,
+            "content": "import { notFound } from \"next/navigation\";\n\nimport { SessionDetail } from \"@/components/session-detail\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\nimport { getSession } from \"@/lib/sessions\";\n\nexport default async function SessionPage({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}) {\n  const { id } = await params;\n  const timestamp = Number.parseInt(id, 10);\n  if (!Number.isFinite(timestamp)) {\n    notFound();\n  }\n\n  const session = await getSession(timestamp);\n  if (!session) {\n    notFound();\n  }\n\n  return <SessionDetail displayCwd={getDisplayCwd()} session={session} />;\n}\n",
+            "path": "app/sessions/[id]/page.tsx",
+            "truncated": false
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "Now I need to add a `generateMetadata` function to dynamically set the page title. Let me update the file:",
+          "state": "done"
+        },
+        {
+          "type": "tool-editFile",
+          "toolCallId": "toolu_01FV9QTfuD4X3nkCu7WzBBY9",
+          "state": "output-available",
+          "input": {
+            "newText": "import { notFound } from \"next/navigation\";\nimport type { Metadata } from \"next\";\n\nimport { SessionDetail } from \"@/components/session-detail\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\nimport { getSession } from \"@/lib/sessions\";\n\nexport async function generateMetadata({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}): Promise<Metadata> {\n  const { id } = await params;\n  const timestamp = Number.parseInt(id, 10);\n  if (!Number.isFinite(timestamp)) {\n    return { title: \"Codify\" };\n  }\n\n  const session = await getSession(timestamp);\n  if (!session) {\n    return { title: \"Codify\" };\n  }\n\n  return {\n    title: `${session.title} - Codify`,\n  };\n}\n\nexport default async function SessionPage({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}) {\n  const { id } = await params;\n  const timestamp = Number.parseInt(id, 10);\n  if (!Number.isFinite(timestamp)) {\n    notFound();\n  }\n\n  const session = await getSession(timestamp);\n  if (!session) {\n    notFound();\n  }\n\n  return <SessionDetail displayCwd={getDisplayCwd()} session={session} />;\n}",
+            "oldText": "import { notFound } from \"next/navigation\";\n\nimport { SessionDetail } from \"@/components/session-detail\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\nimport { getSession } from \"@/lib/sessions\";\n\nexport default async function SessionPage({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}) {\n  const { id } = await params;\n  const timestamp = Number.parseInt(id, 10);\n  if (!Number.isFinite(timestamp)) {\n    notFound();\n  }\n\n  const session = await getSession(timestamp);\n  if (!session) {\n    notFound();\n  }\n\n  return <SessionDetail displayCwd={getDisplayCwd()} session={session} />;\n}",
+            "path": "app/sessions/[id]/page.tsx"
+          },
+          "output": {
+            "path": "app/sessions/[id]/page.tsx",
+            "replaced": 1
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "Perfect! I've updated the session details page to dynamically set the title to `<session title> - Codify`. \n\nThe changes I made:\n1. Added the `Metadata` type import from Next.js\n2. Created a `generateMetadata` function that:\n   - Retrieves the session by ID\n   - Returns the session title followed by \" - Codify\" in the format you requested\n   - Falls back to just \"Codify\" if the session is not found or invalid\n\nThis follows Next.js conventions for dynamic metadata generation on individual pages, and the title will now show the specific session title in the browser tab.",
+          "state": "done"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "text",
+          "text": "Update the title for the new session page to \"New session - Codify\""
+        }
+      ],
+      "id": "4msLoR2wmmUy93zL",
+      "role": "user"
+    },
+    {
+      "id": "",
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "I'll update the new session page to have the title \"New session - Codify\". Let me check and modify that file.",
+          "state": "done"
+        },
+        {
+          "type": "tool-readFile",
+          "toolCallId": "toolu_01CkQvULm8tFNR9kmAFFC4sG",
+          "state": "output-available",
+          "input": {
+            "path": "app/sessions/new/page.tsx"
+          },
+          "output": {
+            "bytes": 1119,
+            "content": "import { NewSessionForm } from \"@/components/new-session-form\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\n\nexport default function NewSessionPage() {\n  const displayCwd = getDisplayCwd();\n\n  return (\n    <div className=\"flex flex-1 flex-col\">\n      <header className=\"flex items-baseline gap-3 border-b px-6 py-4\">\n        <span className=\"font-semibold text-lg\">new task</span>\n        <span className=\"font-mono text-muted-foreground text-sm\">\n          {displayCwd}\n        </span>\n      </header>\n      <section className=\"flex flex-1 flex-col items-center justify-center px-4\">\n        <div className=\"flex w-full max-w-2xl flex-col items-center gap-6\">\n          <div className=\"flex flex-col items-center gap-2 text-center\">\n            <h1 className=\"font-semibold text-3xl tracking-tight\">\n              What should we build today?\n            </h1>\n            <p className=\"text-muted-foreground\">\n              Describe your task and the agent will figure out and run the\n              tools.\n            </p>\n          </div>\n          <NewSessionForm />\n        </div>\n      </section>\n    </div>\n  );\n}\n",
+            "path": "app/sessions/new/page.tsx",
+            "truncated": false
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "tool-editFile",
+          "toolCallId": "toolu_01Uh9y9TVvPy3j9deeq4adnS",
+          "state": "output-available",
+          "input": {
+            "newText": "import type { Metadata } from \"next\";\n\nimport { NewSessionForm } from \"@/components/new-session-form\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\n\nexport const metadata: Metadata = {\n  title: \"New session - Codify\",\n};\n\nexport default function NewSessionPage() {",
+            "oldText": "import { NewSessionForm } from \"@/components/new-session-form\";\nimport { getDisplayCwd } from \"@/lib/cwd\";\n\nexport default function NewSessionPage() {",
+            "path": "app/sessions/new/page.tsx"
+          },
+          "output": {
+            "path": "app/sessions/new/page.tsx",
+            "replaced": 1
+          },
+          "callProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "resultProviderMetadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          }
+        },
+        {
+          "type": "step-start"
+        },
+        {
+          "type": "text",
+          "text": "Perfect! I've updated the new session page to have the title \"New session - Codify\". I added:\n1. The `Metadata` type import from Next.js\n2. An exported `metadata` object with the title set to \"New session - Codify\"\n\nThis will now display \"New session - Codify\" in the browser tab when users are on the new session page.",
+          "state": "done"
+        }
+      ]
+    }
+  ],
+  "modifiedAt": "2026-05-15T14:55:56.142Z",
+  "title": "Update Website Title to Codify",
+  "customInstructions": "# Project instructions\n\nRead @README.md to learn what the objective is of this project.\n\n## User interface components\n\n1. **Prioritize Official Components:** Always check the shadcn/ui registry\n   before building custom UI. Use `npx shadcn@latest add` for components.\n2. **Use MCP Server:** Use the shadcn MCP server (`npx shadcn@latest mcp init --client claude`) to query and install components using natural language.\n3. **Styling:** Use Tailwind CSS for all custom styling. Adhere to the established CSS variables (`--primary`, `--background`, etc.) in `globals.css`.\n4. **Structure:** Install components in `components/ui`.\n5. **Accessibility:** Do not remove aria attributes or keyboard handlers from shadcn components.\n6. **Iconography:** Use `lucide-react` icons, as they are the default for shadcn.\n\n## Important NextJS information\n\nThis version of nextjs has breaking changes — APIs, conventions, and file\nstructure may all differ from your training data. Read the relevant guide in\n`node_modules/next/dist/docs/` before writing any code. Heed deprecation\nnotices.\n"
+}
