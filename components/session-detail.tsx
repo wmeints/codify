@@ -160,7 +160,7 @@ export const SessionDetail = ({ session, displayCwd }: SessionDetailProps) => {
         className="min-h-0 flex-1 overflow-y-auto"
         data-slot="session-transcript"
       >
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-6">
+        <div className="mx-auto flex w-full max-w-full flex-col gap-6 px-6 py-6">
           {messages.map((message) => (
             <MessageRow key={message.id} message={message} />
           ))}
