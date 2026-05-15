@@ -5,4 +5,5 @@ import react from "ultracite/oxlint/react";
 
 export default defineConfig({
   extends: [core, react, next],
+  ignorePatterns: ["components/ui/**", "hooks/use-mobile.ts"],
 });

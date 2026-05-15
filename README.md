@@ -19,5 +19,21 @@ CODIFY_LLM_API_KEY=
 CODIFY_LLM_URL=
 ```
 
-Run the application application with `pnpm dev` and access it
-via http://localhost:3000/
+Run the application with `pnpm codify` and access it via
+http://localhost:3000/.
+
+To make the `codify` command available globally on your system, link
+the package once:
+
+```bash
+pnpm link --global
+```
+
+After that you can launch the app from anywhere with:
+
+```bash
+codify
+```
+
+The command builds the app if needed and then starts the production
+server. It accepts no arguments — any extra arguments are ignored.
